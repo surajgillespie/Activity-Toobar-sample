@@ -1,0 +1,6 @@
+[Activity]
+name = ExposingFoo
+activity_version = 1
+bundle_id = org.sugarlabs.ExposingFoo
+exec = sugar-activity-web
+icon = activity-icon
