@@ -20,30 +20,64 @@ define(function (require) {
         var actdescription = document.getElementById("descrip");
         var Title;
         var mdata;
-        
+        var flag=0;
         // Colorize the activity icon.
         var activityButton = document.getElementById("activity-button");
         activity.getXOColor(function (error, colors) {
             icon.colorize(activityButton, colors);
-                     
-        });
-       
-        datastoreObject.getMetadata(function (error, metadata) {
             
+            /*
+            datastoreObject.getMetadata(function (error, metadata) {
+                console.log("in metadata");
+                if(metadata==null)
+                 {
+                    console.log("metadata is null");
+                    activityname=(metadata.activity).split('.');
+                    actname.value=activityname[2];
+                 }
+                else
+                 {
+                    console.log("metadata is not null");
+                    actname.value=metadata.title;
+                 }   
+
+                if(metadata.description==null)
+                 actdescription.value="";
+                else
+                 actdescription.value=metadata.description;  
+            });    */           
+        });
+        console.log("1");
+        datastoreObject.getMetadata(function (error, metadata) {
+            console.log("2");
             mdata=metadata;
             console.log(metadata);
-            
-            abc();
+            flag=1;
+            abc("second");
               });
                 
-             abc();
-                
-                function abc()
+                abc("first");
+                var Title;
+
+
+
+                //console.log("inside get environment");
+                function abc(time)
                 {
-                   
+                    console.log(time);
                 if((mdata==null)||(mdata.title==null))
-                {   
-                   
+                {   console.log(mdata);
+                    console.log("metadata is null");
+
+                    datastoreObject.getMetadata(function (error, metadata) {
+            
+                    mdata=metadata;
+                    console.log(metadata);
+                    console.log("3");
+                    });
+                    if(mdata==null)
+                        console.log("metadata is still null");
+                    console.log("4");
                     env.getEnvironment(function (error, environment) {
                     var defaultTitle = (environment.bundleId).split('.');
                     Title=defaultTitle[2];
@@ -58,7 +92,9 @@ define(function (require) {
                     });
                  }   
                 else 
-                {                     
+                {   
+
+                    console.log(mdata);
                     if(mdata.title!=null)
                     {actname.value=mdata.title;
                      datastoreObject.setMetadata({
@@ -68,13 +104,13 @@ define(function (require) {
                     });
                     datastoreObject.save(function () {});   
                     }
-                        
-                    if(mdata.description!=null)
-                        actdescription.value=mdata.description;
-                    
+                        /*
+                    if(metadata.description!=null)
+                        actdescription.value=metadata.description;
+                    */
                 }}
            
-    
+        console.log("5");
         stopButton.onclick = function () {
             activity.close();
          };
@@ -88,10 +124,13 @@ define(function (require) {
                     "title": actname.value
                 });
             
-            datastoreObject.save(function () {});
+           // datastoreObject.save(function () {});
             
 
+            datastoreObject.getMetadata(function (error, metadata) {
             
+            console.log(metadata);
+             });
         };
 
         actdescription.onblur=function() { 
